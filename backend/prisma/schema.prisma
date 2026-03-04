@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ────────────────────────────────────────────────────────────
+// Represents Students, Institution Admins, and System Admins
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String?   // null for Google OAuth users
+  name          String?
+  role          Role      @default(STUDENT)
+  googleId      String?   @unique // for Google OAuth
+  avatar        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  institutionId Int?
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+  records       AcademicRecord[] @relation("StudentRecords")
+
+  @@map("users")
+}
+
+// ─── Institution ─────────────────────────────────────────────────────
+// Universities / Colleges that issue academic records
+model Institution {
+  id              Int       @id @default(autoincrement())
+  name            String
+  accreditation   String?
+  contactEmail    String?
+  address         String?
+  status          InstitutionStatus @default(PENDING)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  admins          User[]
+  records         AcademicRecord[]
+
+  @@map("institutions")
+}
+
+// ─── Academic Record ─────────────────────────────────────────────────
+// Degrees, transcripts, certificates issued by institutions
+model AcademicRecord {
+  id              Int       @id @default(autoincrement())
+  studentId       Int
+  institutionId   Int
+  degree          String
+  program         String?
+  issueDate       DateTime  @default(now())
+  graduationYear  Int?
+  grade           String?
+  status          RecordStatus @default(PENDING)
+  refCode         String    @unique
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  student         User          @relation("StudentRecords", fields: [studentId], references: [id])
+  institution     Institution   @relation(fields: [institutionId], references: [id])
+  sharedLinks     SharedLink[]
+
+  @@map("academic_records")
+}
+
+// ─── Shared Link ─────────────────────────────────────────────────────
+// Public, expiring verification links that students share
+model SharedLink {
+  id          String    @id @default(uuid())
+  recordId    Int
+  token       String    @unique
+  expiresAt   DateTime
+  isRevoked   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  record      AcademicRecord @relation(fields: [recordId], references: [id])
+
+  @@map("shared_links")
+}
+
+// ─── Audit Log ───────────────────────────────────────────────────────
+// Tracks all important system actions for the Admin Panel
+model AuditLog {
+  id          Int       @id @default(autoincrement())
+  userId      Int?
+  userEmail   String?
+  action      String
+  resource    String?
+  ipAddress   String?
+  timestamp   DateTime  @default(now())
+
+  @@map("audit_logs")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────
+enum Role {
+  STUDENT
+  INSTITUTION
+  ADMIN
+}
+
+enum RecordStatus {
+  PENDING
+  VERIFIED
+  REVOKED
+}
+
+enum InstitutionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

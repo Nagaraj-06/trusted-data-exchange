@@ -1,7 +1,7 @@
 import React from 'react';
-import './Dashboard.css';
+import './StudentDashboard.css';
 
-const Dashboard = () => {
+const StudentDashboard = () => {
   return (
     <div className="dashboard-container">
       {/* Sidebar Navigation */}
@@ -271,4 +271,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default StudentDashboard;

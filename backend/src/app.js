@@ -1,0 +1,36 @@
+const express = require("express");
+require("./config/env"); // Load .env
+const routes = require("./routes");
+const errorMiddleware = require("./middlewares/error.middleware");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const { frontendUrl } = require("./config/env");
+const swaggerDocs = require("./config/swagger");
+
+const app = express();
+
+// Middlewares
+app.use(express.json());
+app.use(cookieParser());
+
+// CORS
+app.use(
+    cors({
+        origin: frontendUrl,
+        methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+        credentials: true,
+    })
+);
+
+// Routes
+app.get("/", (req, res) => res.send("Trusted Academic Data Exchange API is running"));
+
+app.use(routes);
+
+// Swagger docs
+swaggerDocs(app);
+
+// Error handling middleware
+app.use(errorMiddleware);
+
+module.exports = app;

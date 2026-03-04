@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/Login/Login';
-import Dashboard from './pages/DashBoard/Dashboard';
+import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 import InstitutionDashboard from './pages/InstitutionDashboard/InstitutionDashboard';
@@ -11,14 +11,18 @@ import AdminPanel from './pages/AdminPanel/AdminPanel';
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/verify/:token" element={<EmployerVerification />} />
+
+      {/* Protected Routes (JWT required) */}
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/institution-dashboard" element={<InstitutionDashboard />} />
-        <Route path="/employer-verification" element={<EmployerVerification />} />
         <Route path="/admin-panel" element={<AdminPanel />} />
       </Route>
-      {/* Catch all - redirect to login or 404 */}
+
+      {/* Catch all - redirect to login */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
