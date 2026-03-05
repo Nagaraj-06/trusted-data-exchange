@@ -11,7 +11,7 @@ async function getProfile(userId) {
             role: true,
             avatar: true,
             createdAt: true,
-            institution: { select: { name: true } },
+            institution: { select: { name: true, accreditation: true, contactEmail: true } },
         },
     });
 

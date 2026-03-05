@@ -34,3 +34,12 @@ exports.updateRecordStatus = async (req, res, next) => {
         next(err);
     }
 };
+// POST /private/api/records/bulk (Institution Admin only)
+exports.bulkIssueRecords = async (req, res, next) => {
+    try {
+        const data = await recordsService.bulkCreateRecords(req.user, req.body.records);
+        return response.created(res, data, `${data.length} records issued successfully`);
+    } catch (err) {
+        next(err);
+    }
+};

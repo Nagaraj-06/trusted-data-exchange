@@ -4,13 +4,13 @@ const { connectDB } = require("./config/db");
 const { host, port } = require("./config/env");
 
 async function startServer() {
-    await connectDB();
+  await connectDB();
 
-    const server = http.createServer(app);
+  const server = http.createServer(app);
 
-    server.listen(port, () => {
-        console.log(`Server running on ${host}:${port}`);
-    });
+  server.listen(port, () => {
+    console.log(`Server running on ${host}:${port}`);
+  });
 }
 
 startServer();

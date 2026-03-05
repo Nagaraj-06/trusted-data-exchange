@@ -66,4 +66,33 @@ async function updateRecordStatus(user, recordId, status) {
     return record;
 }
 
-module.exports = { getRecords, createRecord, updateRecordStatus };
+// Bulk create academic records (Institution only)
+async function bulkCreateRecords(user, recordsData) {
+    const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+
+    if (!dbUser.institutionId) {
+        const err = new Error("You are not authorized to issue records.");
+        err.statusCode = 403;
+        throw err;
+    }
+
+    const records = await Promise.all(recordsData.map(async (data) => {
+        return prisma.academicRecord.create({
+            data: {
+                student: { connect: { id: parseInt(data.studentId) } },
+                institution: { connect: { id: dbUser.institutionId } },
+                degree: data.degree,
+                program: data.program,
+                issueDate: data.issueDate ? new Date(data.issueDate) : new Date(),
+                graduationYear: data.graduationYear ? parseInt(data.graduationYear) : null,
+                grade: data.grade,
+                status: "PENDING",
+                refCode: `REF-${uuidv4().slice(0, 8).toUpperCase()}`,
+            },
+        });
+    }));
+
+    return records;
+}
+
+module.exports = { getRecords, createRecord, updateRecordStatus, bulkCreateRecords };

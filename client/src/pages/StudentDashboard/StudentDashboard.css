@@ -1,14 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
 }
 
 .material-symbols-outlined {
@@ -124,10 +117,16 @@ body {
   color: #4c669a;
   text-decoration: none;
   transition: all 0.3s;
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
 }
 
 .nav-item:hover {
   background-color: #f3f4f6;
+  color: #135bec;
 }
 
 .dark .nav-item:hover {
@@ -137,6 +136,7 @@ body {
 .active-nav {
   background-color: #e7ebf3;
   color: #135bec;
+  font-weight: 600;
 }
 
 .dark .active-nav {
@@ -182,7 +182,29 @@ body {
 }
 
 .btn-icon {
+  font-size: 1.25rem;
+}
+
+.logout-btn-sidebar {
+  width: 100%;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
   font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 1rem;
+}
+
+.logout-btn-sidebar:hover {
+  background-color: #fecaca;
 }
 
 .user-profile {
@@ -703,6 +725,41 @@ body {
 
 .processing .status-dot {
   background-color: #9ca3af;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.revoked {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.share-mini-btn {
+  background: rgba(19, 91, 236, 0.1);
+  color: #135bec;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.share-mini-btn:hover {
+  background: rgba(19, 91, 236, 0.2);
+  transform: scale(1.1);
+}
+
+.no-records {
+  padding: 3rem;
+  text-align: center;
+  color: #4c669a;
 }
 
 .record-ref {

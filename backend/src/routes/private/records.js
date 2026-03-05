@@ -130,4 +130,39 @@ router.post("/", authorize("INSTITUTION"), recordsController.createRecord);
  */
 router.patch("/:id/status", authorize("INSTITUTION"), recordsController.updateRecordStatus);
 
+/**
+ * @swagger
+ * /private/api/records/bulk:
+ *   post:
+ *     summary: Bulk issue academic records (Institution only)
+ *     tags: [Records]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - records
+ *             properties:
+ *               records:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - studentId
+ *                     - degree
+ *                   properties:
+ *                     studentId: { type: integer }
+ *                     degree: { type: string }
+ *                     program: { type: string }
+ *                     issueDate: { type: string, format: date }
+ *                     graduationYear: { type: integer }
+ *                     grade: { type: string }
+ *     responses:
+ *       201:
+ *         description: Records issued successfully
+ */
+router.post("/bulk", authorize("INSTITUTION"), recordsController.bulkIssueRecords);
+
 module.exports = router;

@@ -1,14 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
 }
 
 .material-symbols-outlined {
@@ -25,6 +18,7 @@ body {
   word-wrap: normal;
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
 
@@ -99,7 +93,8 @@ body {
   gap: 0.25rem;
 }
 
-.nav-link {
+.nav-link,
+.nav-link-btn {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -108,17 +103,25 @@ body {
   color: #4c669a;
   text-decoration: none;
   transition: background-color 0.3s;
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link-btn:hover {
   background-color: #f6f6f8;
 }
 
-.dark .nav-link:hover {
+.dark .nav-link:hover,
+.dark .nav-link-btn:hover {
   background-color: #1f2937;
 }
 
-.nav-link.active {
+.nav-link.active,
+.nav-link-btn.active {
   background-color: rgba(19, 91, 236, 0.1);
   color: #135bec;
 }
@@ -245,7 +248,7 @@ body {
 }
 
 .search-input:focus {
-  ring: 2px solid rgba(19, 91, 236, 0.5);
+  outline: 2px solid rgba(19, 91, 236, 0.5);
 }
 
 .dark .search-input {
@@ -400,6 +403,50 @@ body {
   margin-bottom: 1rem;
 }
 
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background-color: #f8f9fc;
+  border-radius: 10px;
+  border: 1px solid #e7ebf3;
+}
+
+.dark .profile-box {
+  background-color: #1a1e2e;
+  border-color: #374151;
+}
+
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 0.5rem;
+}
+
+.profile-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4c669a;
+  text-transform: uppercase;
+}
+
+.profile-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.dark .profile-label {
+  color: #94a3b8;
+}
+
 /* Upload Zone */
 .upload-zone {
   flex: 1;
@@ -508,7 +555,7 @@ body {
 }
 
 .field-input:focus {
-  ring: 2px solid #135bec;
+  outline: 2px solid #135bec;
   border-color: #135bec;
 }
 
@@ -581,6 +628,28 @@ body {
 }
 
 .dark .action-btn {
+  background-color: #1f2937;
+}
+
+.action-btn-small {
+  padding: 0.25rem;
+  background: none;
+  border: none;
+  color: #4c669a;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn-small:hover {
+  background-color: #f3f4f6;
+  color: #135bec;
+}
+
+.dark .action-btn-small:hover {
   background-color: #1f2937;
 }
 
