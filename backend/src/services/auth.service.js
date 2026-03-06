@@ -17,8 +17,8 @@ async function register({ name, email, password, role }) {
         data: { name, email, password: hashedPassword, role: role || "STUDENT" },
     });
 
-    const token = generateToken({ id: user.id, email: user.email, role: user.role });
-    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
+    const token = generateToken({ id: user.id, email: user.email, role: user.role, institutionId: user.institutionId });
+    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role, institutionId: user.institutionId } };
 }
 
 // Login with email & password
@@ -37,8 +37,8 @@ async function login({ email, password }) {
         throw err;
     }
 
-    const token = generateToken({ id: user.id, email: user.email, role: user.role });
-    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
+    const token = generateToken({ id: user.id, email: user.email, role: user.role, institutionId: user.institutionId });
+    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role, institutionId: user.institutionId } };
 }
 
 // Login / Register with Google OAuth
@@ -55,8 +55,8 @@ async function googleLogin(idToken) {
         });
     }
 
-    const token = generateToken({ id: user.id, email: user.email, role: user.role });
-    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
+    const token = generateToken({ id: user.id, email: user.email, role: user.role, institutionId: user.institutionId });
+    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role, institutionId: user.institutionId } };
 }
 
 module.exports = { register, login, googleLogin };

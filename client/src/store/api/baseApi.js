@@ -6,6 +6,6 @@ export const baseApi = createApi({
         baseUrl: 'http://localhost:8080',
         credentials: 'include', // Needed for httpOnly cookies
     }),
-    tagTypes: ['User', 'Records', 'Institutions'],
+    tagTypes: ['User', 'Records', 'Institutions', 'Students'],
     endpoints: () => ({}),
 });

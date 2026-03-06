@@ -16,6 +16,7 @@ model User {
   name          String?
   role          Role      @default(STUDENT)
   googleId      String?   @unique // for Google OAuth
+  rollNumber    String?   @unique // Standardized student identifier
   avatar        String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -36,6 +37,8 @@ model Institution {
   accreditation   String?
   contactEmail    String?
   address         String?
+  documentUrl     String?   // New field for verification documents
+  password        String?   // Temporary storage for hashed password until approval
   status          InstitutionStatus @default(PENDING)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt

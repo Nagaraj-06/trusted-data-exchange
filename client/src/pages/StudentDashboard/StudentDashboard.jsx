@@ -26,6 +26,9 @@ const StudentDashboard = () => {
   const records = recordsResponse?.data || [];
   const shareLinks = shareLinksResponse?.data || [];
 
+  // State for Record View Modal
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
   const handleLogout = async () => {
     try {
       await logoutApi().unwrap();
@@ -70,6 +73,10 @@ const StudentDashboard = () => {
     } catch (err) {
       toast.error('Failed to create share link');
     }
+  };
+
+  const handleViewRecord = (record) => {
+    setSelectedRecord(record);
   };
 
   return (
@@ -203,7 +210,7 @@ const StudentDashboard = () => {
                     <p>Loading your records...</p>
                   ) : records.length > 0 ? (
                     records.map((record) => (
-                      <div className="record-item" key={record.id}>
+                      <div className="record-item" key={record.id} onClick={() => handleViewRecord(record)} style={{ cursor: 'pointer' }}>
                         <div className="record-content">
                           <div className="record-icon primary-bg">
                             <span className="material-symbols-outlined icon-lg">workspace_premium</span>
@@ -213,16 +220,21 @@ const StudentDashboard = () => {
                             <p className="record-meta">{record.institution?.name} • Issued {new Date(record.issueDate).toLocaleDateString()}</p>
                           </div>
                         </div>
-                        <div className="record-actions">
+                        <div className="record-actions" onClick={(e) => e.stopPropagation()}>
                           <div className="record-status">
                             <span className={`status-badge ${record.status.toLowerCase()}`}>
                               <span className="status-dot"></span> {record.status}
                             </span>
                             <span className="record-ref">Ref: #{record.refCode}</span>
                           </div>
-                          <button className="share-mini-btn" onClick={() => handleShare(record.id)}>
-                            <span className="material-symbols-outlined">share</span>
-                          </button>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button className="view-mini-btn" onClick={() => handleViewRecord(record)} title="View Detail">
+                              <span className="material-symbols-outlined">visibility</span>
+                            </button>
+                            <button className="share-mini-btn" onClick={() => handleShare(record.id)} title="Share Link">
+                              <span className="material-symbols-outlined">share</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))
@@ -244,7 +256,7 @@ const StudentDashboard = () => {
               <div className="records-list">
                 {records.length > 0 ? (
                   records.map((record) => (
-                    <div className="record-item" key={record.id}>
+                    <div className="record-item" key={record.id} onClick={() => handleViewRecord(record)} style={{ cursor: 'pointer' }}>
                       <div className="record-content">
                         <div className="record-icon indigo-bg">
                           <span className="material-symbols-outlined icon-lg">history_edu</span>
@@ -254,10 +266,15 @@ const StudentDashboard = () => {
                           <p className="record-meta">{record.program} • {record.grade}</p>
                         </div>
                       </div>
-                      <div className="record-actions">
-                        <button className="share-mini-btn" onClick={() => handleShare(record.id)}>
-                          <span className="material-symbols-outlined">share</span>
-                        </button>
+                      <div className="record-actions" onClick={(e) => e.stopPropagation()}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button className="view-mini-btn" onClick={() => handleViewRecord(record)} title="View Detail">
+                            <span className="material-symbols-outlined">visibility</span>
+                          </button>
+                          <button className="share-mini-btn" onClick={() => handleShare(record.id)}>
+                            <span className="material-symbols-outlined">share</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -338,6 +355,80 @@ const StudentDashboard = () => {
           )}
         </div>
       </main>
+
+      {/* Record View Modal */}
+      {selectedRecord && (
+        <div className="modal-overlay" onClick={() => setSelectedRecord(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="header-brand">
+                <span className="material-symbols-outlined brand-badge">workspace_premium</span>
+                <h3 className="modal-title">Official Academic Document</h3>
+              </div>
+              <button className="close-btn" onClick={() => setSelectedRecord(null)}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="certificate-design">
+                <div className="cert-institution">
+                  <div className="inst-badge">{selectedRecord.institution?.name?.charAt(0)}</div>
+                  <h2 className="inst-name">{selectedRecord.institution?.name}</h2>
+                  <p className="inst-tagline">Academic Excellence & Integrity</p>
+                </div>
+
+                <div className="cert-divider"></div>
+
+                <div className="cert-main">
+                  <p className="cert-statement">This is to certify that the following academic credential has been issued to</p>
+                  <h1 className="student-name-large">{user?.name}</h1>
+
+                  <div className="cert-details-grid">
+                    <div className="detail-item">
+                      <label>Degree conferred</label>
+                      <p className="detail-value">{selectedRecord.degree}</p>
+                    </div>
+                    <div className="detail-item">
+                      <label>Academic Program</label>
+                      <p className="detail-value">{selectedRecord.program}</p>
+                    </div>
+                    <div className="detail-item">
+                      <label>Graduation Year</label>
+                      <p className="detail-value">{selectedRecord.graduationYear}</p>
+                    </div>
+                    <div className="detail-item">
+                      <label>Final Grade / CGPA</label>
+                      <p className="detail-value highlight">{selectedRecord.grade}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="cert-footer">
+                  <div className="footer-left">
+                    <p className="footer-label">Issue Date</p>
+                    <p className="footer-value">{new Date(selectedRecord.issueDate).toLocaleDateString()}</p>
+                  </div>
+                  <div className="footer-right">
+                    <div className={`modal-status-badge ${selectedRecord.status.toLowerCase()}`}>
+                      {selectedRecord.status}
+                    </div>
+                    <p className="ref-code">Ref: #{selectedRecord.refCode}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button className="secondary-btn" onClick={() => setSelectedRecord(null)}>Close</button>
+              <button className="primary-btn-accent" onClick={() => handleShare(selectedRecord.id)}>
+                <span className="material-symbols-outlined">share</span>
+                Create Share Link
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

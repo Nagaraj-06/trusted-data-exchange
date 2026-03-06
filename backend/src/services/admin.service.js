@@ -1,4 +1,5 @@
 const { prisma } = require("../config/db");
+const bcrypt = require("bcrypt");
 
 // Get all institutions
 async function getInstitutions() {
@@ -10,6 +11,29 @@ async function getInstitutions() {
 
 // Approve or reject an institution
 async function updateInstitutionStatus(institutionId, status) {
+    const institution = await prisma.institution.findUnique({
+        where: { id: institutionId }
+    });
+
+    if (status === "APPROVED" && institution && institution.status !== "APPROVED") {
+        // Automatically create a user for this institution
+        const existingUser = await prisma.user.findUnique({
+            where: { email: institution.contactEmail }
+        });
+
+        if (!existingUser) {
+            await prisma.user.create({
+                data: {
+                    email: institution.contactEmail,
+                    password: institution.password, // This is already hashed from registerInstitution
+                    name: institution.name,
+                    role: "INSTITUTION",
+                    institutionId: institutionId
+                }
+            });
+        }
+    }
+
     return prisma.institution.update({
         where: { id: institutionId },
         data: { status },
@@ -29,7 +53,7 @@ async function getStats() {
     return { totalInstitutions, totalStudents, totalRecords, pendingApprovals };
 }
 
-// Create a new institution
+// Create a new institution (Admin direct)
 async function createInstitution(data) {
     return prisma.institution.create({
         data: {
@@ -42,11 +66,34 @@ async function createInstitution(data) {
     });
 }
 
+// Public registration (Pending)
+async function registerInstitution(data) {
+    return prisma.institution.create({
+        data: {
+            name: data.name,
+            accreditation: data.accreditation,
+            contactEmail: data.contactEmail,
+            address: data.address,
+            documentUrl: data.documentUrl,
+            password: data.password,
+            status: "PENDING",
+        },
+    });
+}
+
 // Link a user to an institution
 async function linkUserToInstitution(userId, institutionId) {
     return prisma.user.update({
         where: { id: parseInt(userId) },
         data: { institutionId: parseInt(institutionId), role: "INSTITUTION" },
+    });
+}
+
+// Get institution by email for status check
+async function getInstitutionByEmail(email) {
+    return prisma.institution.findFirst({
+        where: { contactEmail: email },
+        orderBy: { createdAt: "desc" },
     });
 }
 
@@ -71,5 +118,7 @@ module.exports = {
     getStats,
     getAuditLogs,
     createInstitution,
+    registerInstitution,
+    getInstitutionByEmail,
     linkUserToInstitution
 };

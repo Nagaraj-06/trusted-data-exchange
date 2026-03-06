@@ -1,0 +1,18 @@
+[
+    {
+        "studentRollNumber": "7376231CS100",
+        "degree": "B.Sc. Computer Science",
+        "program": "Computer Science & Engineering",
+        "issueDate": "2024-05-15",
+        "graduationYear": 2024,
+        "grade": "A+"
+    },
+    {
+        "studentRollNumber": "7376242IT100",
+        "degree": "B.Tech Information Technology",
+        "program": "Information Technology",
+        "issueDate": "2024-06-01",
+        "graduationYear": 2024,
+        "grade": "A"
+    }
+]

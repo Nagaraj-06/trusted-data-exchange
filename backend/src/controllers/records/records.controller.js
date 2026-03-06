@@ -37,7 +37,26 @@ exports.updateRecordStatus = async (req, res, next) => {
 // POST /private/api/records/bulk (Institution Admin only)
 exports.bulkIssueRecords = async (req, res, next) => {
     try {
-        const data = await recordsService.bulkCreateRecords(req.user, req.body.records);
+        const { records } = req.body;
+
+        if (!records || !Array.isArray(records) || records.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Request body must contain a non-empty 'records' array",
+            });
+        }
+
+        // Validate each record has required fields
+        for (let i = 0; i < records.length; i++) {
+            if (!records[i].studentRollNumber || !records[i].degree) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Record at index ${i} is missing required fields: 'studentRollNumber' and 'degree' are required`,
+                });
+            }
+        }
+
+        const data = await recordsService.bulkCreateRecords(req.user, records);
         return response.created(res, data, `${data.length} records issued successfully`);
     } catch (err) {
         next(err);

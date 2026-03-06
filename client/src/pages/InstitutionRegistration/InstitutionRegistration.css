@@ -1,0 +1,265 @@
+.registration-page {
+    min-height: 100vh;
+    background-color: #f6f6f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2rem 4rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.dark .registration-page {
+    background-color: #020617;
+}
+
+.registration-nav {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #135bec;
+}
+
+.logo-icon svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.brand-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #0f172a;
+}
+
+.dark .brand-text {
+    color: white;
+}
+
+.login-link-btn {
+    padding: 0.5rem 1.25rem;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    color: #0f172a;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.dark .login-link-btn {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: white;
+}
+
+.login-link-btn:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.dark .login-link-btn:hover {
+    background-color: #334155;
+}
+
+.registration-card {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .registration-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+}
+
+.registration-header {
+    padding: 3rem 3rem 2rem;
+    background: white;
+    color: #0f172a;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .registration-header {
+    background: #1e293b;
+    border-bottom-color: #334155;
+    color: white;
+}
+
+.registration-title {
+    font-size: 2.25rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.dark .registration-title {
+    color: white;
+}
+
+.registration-subtitle {
+    color: #64748b;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.dark .registration-subtitle {
+    color: #94a3b8;
+}
+
+.registration-form {
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 640px) {
+    .registration-form {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #4c669a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dark .form-label {
+    color: #94a3b8;
+}
+
+.form-input {
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: 1px solid #e7ebf3;
+    background-color: #f8fafc;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.dark .form-input {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #135bec;
+    box-shadow: 0 0 0 4px rgba(19, 91, 236, 0.1);
+    background-color: white;
+}
+
+.dark .form-input:focus {
+    background-color: #0f172a;
+}
+
+.registration-footer {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.submit-btn {
+    background: #135bec;
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(19, 91, 236, 0.3);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.back-link {
+    text-align: center;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #135bec;
+}
+
+.success-container {
+    padding: 4rem 3rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.success-icon {
+    font-size: 5rem;
+    color: #10b981;
+}
+
+.success-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.dark .success-title {
+    color: white;
+}
+
+.success-text {
+    color: #64748b;
+    line-height: 1.6;
+    max-width: 500px;
+}

@@ -9,8 +9,10 @@ import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 import InstitutionDashboard from './pages/InstitutionDashboard/InstitutionDashboard';
-import EmployerVerification from './pages/Employerverification/EmployerVerification';
+import RecordVerification from './pages/RecordVerification/RecordVerification';
 import AdminPanel from './pages/AdminPanel/AdminPanel';
+import InstitutionRegistration from './pages/InstitutionRegistration/InstitutionRegistration';
+import ApplicationStatus from './pages/InstitutionRegistration/ApplicationStatus';
 
 function App() {
   const dispatch = useDispatch();
@@ -61,7 +63,9 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/verify/:token" element={<EmployerVerification />} />
+        <Route path="/register-institution" element={<InstitutionRegistration />} />
+        <Route path="/application-status" element={<ApplicationStatus />} />
+        <Route path="/verify/:token" element={<RecordVerification />} />
 
         {/* Protected Routes (JWT required) */}
         <Route element={<PrivateRoute />}>

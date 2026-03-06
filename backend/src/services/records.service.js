@@ -1,5 +1,6 @@
 const { prisma } = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt");
 
 // Get records based on user role
 async function getRecords(user) {
@@ -15,7 +16,7 @@ async function getRecords(user) {
         const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
         return prisma.academicRecord.findMany({
             where: { institutionId: dbUser.institutionId },
-            include: { student: { select: { name: true, email: true } } },
+            include: { student: { select: { name: true, email: true, rollNumber: true } } },
             orderBy: { createdAt: "desc" },
         });
     }
@@ -23,7 +24,7 @@ async function getRecords(user) {
     // ADMIN can see all
     return prisma.academicRecord.findMany({
         include: {
-            student: { select: { name: true, email: true } },
+            student: { select: { name: true, email: true, rollNumber: true } },
             institution: { select: { name: true } },
         },
         orderBy: { createdAt: "desc" },
@@ -40,9 +41,28 @@ async function createRecord(user, data) {
         throw err;
     }
 
+    // Find student by rollNumber or create a placeholder if it doesn't exist
+    let student = await prisma.user.findUnique({
+        where: { rollNumber: String(data.studentRollNumber) }
+    });
+
+    if (!student) {
+        // Create placeholder student if they don't exist
+        const placeholderPassword = await bcrypt.hash(`Welcome@${data.studentRollNumber}`, 10);
+        student = await prisma.user.create({
+            data: {
+                rollNumber: String(data.studentRollNumber),
+                name: `Student ${data.studentRollNumber}`,
+                email: `student.${data.studentRollNumber}@placeholder.edu`, // Placeholder email
+                password: placeholderPassword,
+                role: "STUDENT"
+            }
+        });
+    }
+
     const record = await prisma.academicRecord.create({
         data: {
-            student: { connect: { id: parseInt(data.studentId) } },
+            student: { connect: { id: student.id } },
             institution: { connect: { id: dbUser.institutionId } },
             degree: data.degree,
             program: data.program,
@@ -77,9 +97,27 @@ async function bulkCreateRecords(user, recordsData) {
     }
 
     const records = await Promise.all(recordsData.map(async (data) => {
+        // Find student by rollNumber or create a placeholder
+        let student = await prisma.user.findUnique({
+            where: { rollNumber: String(data.studentRollNumber) }
+        });
+
+        if (!student) {
+            const placeholderPassword = await bcrypt.hash(`Welcome@${data.studentRollNumber}`, 10);
+            student = await prisma.user.create({
+                data: {
+                    rollNumber: String(data.studentRollNumber),
+                    name: `Student ${data.studentRollNumber}`,
+                    email: `student.${data.studentRollNumber}@placeholder.edu`,
+                    password: placeholderPassword,
+                    role: "STUDENT"
+                }
+            });
+        }
+
         return prisma.academicRecord.create({
             data: {
-                student: { connect: { id: parseInt(data.studentId) } },
+                student: { connect: { id: student.id } },
                 institution: { connect: { id: dbUser.institutionId } },
                 degree: data.degree,
                 program: data.program,

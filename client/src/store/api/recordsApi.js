@@ -28,6 +28,7 @@ export const recordsApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: data,
             }),
+            invalidatesTags: ['ShareLinks'],
         }),
         getShareLinks: builder.query({
             query: () => '/private/api/share',
@@ -48,6 +49,9 @@ export const recordsApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Records'],
         }),
+        verifyRecord: builder.query({
+            query: (token) => `/public/api/verify/${token}`,
+        }),
     }),
 });
 
@@ -59,4 +63,5 @@ export const {
     useCreateShareLinkMutation,
     useGetShareLinksQuery,
     useRevokeShareLinkMutation,
+    useVerifyRecordQuery,
 } = recordsApi;

@@ -1,0 +1,6 @@
+name,email,batchYear,deptCategory,deptCode
+John Doe,john.doe@example.edu,2023,CORE,CS
+Jane Smith,jane.smith@example.edu,2024,NON_CORE,IT
+Bob Wilson,bob.wilson@example.edu,2023,CORE,CT
+Alice Brown,alice.brown@example.edu,2025,NON_CORE,IT
+Charlie Davis,charlie.davis@example.edu,2024,CORE,CS

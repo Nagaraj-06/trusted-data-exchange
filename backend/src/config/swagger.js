@@ -41,6 +41,7 @@ const options = {
             { name: "Share", description: "Shareable Link Management" },
             { name: "Users", description: "User Profile Management" },
             { name: "Admin", description: "System Administration" },
+            { name: "Institution", description: "Institution Student Management" },
         ],
     },
     apis: ["./src/routes/**/*.js"],

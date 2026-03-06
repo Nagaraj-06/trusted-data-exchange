@@ -29,6 +29,17 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        applyInstitution: builder.mutation({
+            query: (formData) => ({
+                url: '/public/api/institutions/register',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['AdminStats', 'Institutions'],
+        }),
+        checkApplicationStatus: builder.query({
+            query: (email) => `/public/api/institutions/status/${email}`,
+        }),
         getMe: builder.query({
             query: () => '/private/api/users/me',
             providesTags: ['User'],
@@ -41,5 +52,7 @@ export const {
     useLoginMutation,
     useGoogleLoginMutation,
     useLogoutMutation,
+    useApplyInstitutionMutation,
+    useCheckApplicationStatusQuery,
     useGetMeQuery,
 } = authApi;

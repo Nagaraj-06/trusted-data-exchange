@@ -74,62 +74,62 @@ const LoginPage = () => {
     });
 
     return (
-        <div className="light">
-            <header className="header">
-                <div className="header-brand">
-                    <div className="logo-icon">
+        <div className="login-page-container">
+            <header className="login-header">
+                <div className="login-header-brand">
+                    <div className="login-logo-icon">
                         <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                             <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
                         </svg>
                     </div>
-                    <h2 className="brand-title">Academic Exchange</h2>
+                    <h2 className="login-brand-title">Academic Exchange</h2>
                 </div>
-                <div className="header-nav">
-                    <div className="nav-links">
-                        <button className={`nav-link ${role === 'INSTITUTION' ? 'active' : ''}`} onClick={() => setRole('INSTITUTION')}>Institutions</button>
-                        <button className={`nav-link ${role === 'STUDENT' ? 'active' : ''}`} onClick={() => setRole('STUDENT')}>Students</button>
+                <div className="login-header-nav">
+                    <div className="login-nav-links">
+                        <button className={`login-nav-link ${role === 'INSTITUTION' ? 'login-active' : ''}`} onClick={() => setRole('INSTITUTION')}>Institutions</button>
+                        <button className={`login-nav-link ${role === 'STUDENT' ? 'login-active' : ''}`} onClick={() => setRole('STUDENT')}>Students</button>
                     </div>
-                    <button className="contact-btn">
+                    <button className="login-contact-btn">
                         <span>Contact Support</span>
                     </button>
                 </div>
             </header>
 
-            <main className="login-main-content">
-                <div className="auth-card">
-                    <div className="form-section">
-                        <div className="form-header">
-                            <h1 className="form-title">{isLogin ? 'Welcome back' : 'Create Account'}</h1>
-                            <p className="form-subtitle">
+            <main className="login-main-wrapper">
+                <div className="login-auth-card">
+                    <div className="login-form-section">
+                        <div className="login-form-header">
+                            <h1 className="login-form-title">{isLogin ? 'Welcome back' : 'Create Account'}</h1>
+                            <p className="login-form-subtitle">
                                 {isLogin ? 'Sign in to access your trusted academic data.' : 'Join the trusted academic data exchange platform.'}
                             </p>
                         </div>
 
-                        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+                        {error && <div className="login-error-message" style={{ color: 'red', marginBottom: '0.5rem', fontSize: '0.875rem' }}>{error}</div>}
 
-                        <div className="google-btn-wrapper">
-                            <button className="google-btn" onClick={() => googleLogin()}>
+                        <div className="login-google-btn-wrapper">
+                            <button className="login-google-btn" onClick={() => googleLogin()}>
                                 <img
                                     alt="Google logo"
-                                    className="google-logo"
+                                    className="login-google-logo"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdKNeztH3YMYY-eQH5HGlV3QI0_0K853CRg6JlkUXBgOUR1oTcmYIyXQylBzCr188bt7YeHznlm_qnM-UAYuLQEZBx7UfhqZEvQbdF0gX8ijW7GQ9sQqEHKn3J8X1RS9n0EGAQOiUCK5Y37ZwIPLmThio3BKMDX5lCA4k86bawfpoT-1gDLfvBPutBrNymwhK_a4DJJE3yS9GwqJBb4fA4kILhcT5E5nVXes3Ht1mtaHEhVEp1DVNt62HKM185_F1EAaqRnFdRFqw"
                                 />
                                 <span>Continue with Google</span>
                             </button>
                         </div>
 
-                        <div className="divider">
-                            <div className="divider-line"></div>
-                            <span className="divider-text">or email</span>
-                            <div className="divider-line"></div>
+                        <div className="login-divider">
+                            <div className="login-divider-line"></div>
+                            <span className="login-divider-text">or email</span>
+                            <div className="login-divider-line"></div>
                         </div>
 
-                        <form className="login-form" onSubmit={handleSubmit}>
+                        <form className="login-form-body" onSubmit={handleSubmit}>
                             {!isLogin && (
-                                <div className="form-group">
-                                    <label className="form-label">Full Name</label>
+                                <div className="login-form-group">
+                                    <label className="login-form-label">Full Name</label>
                                     <input
-                                        className="form-input"
+                                        className="login-form-input"
                                         placeholder="John Doe"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -137,10 +137,10 @@ const LoginPage = () => {
                                     />
                                 </div>
                             )}
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="email">Email Address</label>
+                            <div className="login-form-group">
+                                <label className="login-form-label" htmlFor="email">Email Address</label>
                                 <input
-                                    className="form-input"
+                                    className="login-form-input"
                                     id="email"
                                     placeholder="name@university.edu"
                                     type="email"
@@ -150,21 +150,21 @@ const LoginPage = () => {
                                 />
                             </div>
                             {!isLogin && (
-                                <div className="form-group">
-                                    <label className="form-label">Register as</label>
-                                    <select className="form-input" value={role} onChange={(e) => setRole(e.target.value)}>
+                                <div className="login-form-group">
+                                    <label className="login-form-label">Register as</label>
+                                    <select className="login-form-input" value={role} onChange={(e) => setRole(e.target.value)}>
                                         <option value="STUDENT">Student</option>
                                         <option value="INSTITUTION">Institution</option>
                                     </select>
                                 </div>
                             )}
-                            <div className="form-group">
-                                <div className="password-label-wrapper">
-                                    <label className="form-label" htmlFor="password">Password</label>
-                                    {isLogin && <a className="forgot-link" href="#">Forgot?</a>}
+                            <div className="login-form-group">
+                                <div className="login-password-label-wrapper">
+                                    <label className="login-form-label" htmlFor="password">Password</label>
+                                    {isLogin && <a className="login-forgot-link" href="#">Forgot?</a>}
                                 </div>
                                 <input
-                                    className="form-input"
+                                    className="login-form-input"
                                     id="password"
                                     placeholder="••••••••"
                                     type="password"
@@ -173,25 +173,36 @@ const LoginPage = () => {
                                     required
                                 />
                             </div>
-                            <button className="submit-btn" type="submit" disabled={isLoginLoading || isRegisterLoading}>
+                            <button className="login-submit-btn" type="submit" disabled={isLoginLoading || isRegisterLoading}>
                                 {isLoginLoading || isRegisterLoading ? 'Processing...' : isLogin ? 'Sign In' : 'Sign Up'}
                             </button>
                         </form>
 
-                        <p className="signup-text">
+                        <p className="login-signup-text">
                             {isLogin ? "Don't have an account?" : "Already have an account?"}
                             <button
-                                className="signup-link"
-                                style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}
+                                className="login-signup-link"
+                                style={{ background: 'none', border: 'none', color: '#135bec', cursor: 'pointer', outline: 'none' }}
                                 onClick={() => setIsLogin(!isLogin)}
                             >
                                 {isLogin ? 'Get started' : 'Sign in instead'}
                             </button>
                         </p>
+
+                        <div className="login-institution-invite">
+                            <p className="login-invite-text">Are you an academic institution?</p>
+                            <button
+                                onClick={() => navigate('/register-institution')}
+                                className="login-invite-btn"
+                            >
+                                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>corporate_fare</span>
+                                Register your Institution
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="visual-section">
-                        <div className="background-decoration">
+                    <div className="login-visual-section">
+                        <div className="login-visual-decoration">
                             <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
@@ -201,24 +212,24 @@ const LoginPage = () => {
                                 <rect fill="url(#grid)" height="100%" width="100%"></rect>
                             </svg>
                         </div>
-                        <div className="visual-content">
-                            <div className="verified-icon">
+                        <div className="login-visual-content">
+                            <div className="login-verified-badge">
                                 <span className="material-symbols-outlined icon-large">verified_user</span>
                             </div>
-                            <h2 className="visual-title">Secured Academic Data</h2>
-                            <p className="visual-description">
+                            <h2 className="login-visual-title">Secured Academic Data</h2>
+                            <p className="login-visual-description">
                                 Your credentials, verified and protected with military-grade encryption for global portability.
                             </p>
                         </div>
-                        <div className="trust-badges">
-                            <div className="badges-container">
-                                <div className="badge">
-                                    <span className="material-symbols-outlined badge-icon">lock</span>
-                                    <span className="badge-text">SSL Encrypted</span>
+                        <div className="login-trust-badges">
+                            <div className="login-badges-container">
+                                <div className="login-badge">
+                                    <span className="material-symbols-outlined login-badge-icon">lock</span>
+                                    <span className="login-badge-text">SSL Encrypted</span>
                                 </div>
-                                <div className="badge">
-                                    <span className="material-symbols-outlined badge-icon">security</span>
-                                    <span className="badge-text">GDPR Compliant</span>
+                                <div className="login-badge">
+                                    <span className="material-symbols-outlined login-badge-icon">security</span>
+                                    <span className="login-badge-text">GDPR Compliant</span>
                                 </div>
                             </div>
                         </div>

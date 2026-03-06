@@ -65,13 +65,13 @@ router.get("/", recordsController.getRecords);
  *           schema:
  *             type: object
  *             required:
- *               - studentId
+ *               - studentRollNumber
  *               - degree
  *             properties:
- *               studentId:
- *                 type: integer
- *                 description: ID of the student
- *                 example: 1
+ *               studentRollNumber:
+ *                 type: string
+ *                 description: Roll number of the student
+ *                 example: "CS2024001"
  *               degree:
  *                 type: string
  *                 example: "B.Sc. Computer Science"
@@ -150,15 +150,15 @@ router.patch("/:id/status", authorize("INSTITUTION"), recordsController.updateRe
  *                 items:
  *                   type: object
  *                   required:
- *                     - studentId
+ *                     - studentRollNumber
  *                     - degree
  *                   properties:
- *                     studentId: { type: integer }
- *                     degree: { type: string }
- *                     program: { type: string }
- *                     issueDate: { type: string, format: date }
- *                     graduationYear: { type: integer }
- *                     grade: { type: string }
+ *                     studentRollNumber: { type: string, description: "Roll number of the student", example: "CS2024001" }
+ *                     degree: { type: string, example: "B.Sc. Computer Science" }
+ *                     program: { type: string, example: "Computer Science & Engineering" }
+ *                     issueDate: { type: string, format: date, example: "2024-06-15" }
+ *                     graduationYear: { type: integer, example: 2024 }
+ *                     grade: { type: string, example: "First Class" }
  *     responses:
  *       201:
  *         description: Records issued successfully

@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 require("./config/env"); // Load .env
 const routes = require("./routes");
 const errorMiddleware = require("./middlewares/error.middleware");
@@ -12,6 +13,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // CORS
 app.use(

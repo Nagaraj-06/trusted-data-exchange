@@ -1,0 +1,16 @@
+[
+    {
+        "name": "John Doe",
+        "email": "john.doe@example.edu",
+        "batchYear": 2023,
+        "deptCategory": "CORE",
+        "deptCode": "CS"
+    },
+    {
+        "name": "Jane Smith",
+        "email": "jane.smith@example.edu",
+        "batchYear": 2024,
+        "deptCategory": "NON_CORE",
+        "deptCode": "IT"
+    }
+]
