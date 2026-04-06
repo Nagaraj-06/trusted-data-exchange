@@ -243,7 +243,7 @@ const AdminPanel = () => {
                             <td className="table-cell table-cell-center">
                               {inst.documentUrl ? (
                                 <a
-                                  href={`http://localhost:8080${inst.documentUrl}`}
+                                  href={`${import.meta.env.VITE_API_BASE_URL}${inst.documentUrl}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="badge badge-blue"
@@ -318,7 +318,7 @@ const AdminPanel = () => {
                         <td className="table-cell table-cell-center">
                           {inst.documentUrl ? (
                             <a
-                              href={`http://localhost:8080${inst.documentUrl}`}
+                              href={`${import.meta.env.VITE_API_BASE_URL}${inst.documentUrl}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="badge badge-blue"

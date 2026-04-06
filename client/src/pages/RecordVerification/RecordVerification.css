@@ -654,83 +654,11 @@
   background-color: rgba(30, 41, 59, 0.2);
 }
 
-.signature-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
-@media (min-width: 768px) {
-  .signature-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.certificate-validity {
+.qr-verification-seal {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.validity-title {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0f172a;
-  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.dark .validity-title {
-  color: white;
-}
-
-.validity-icon {
-  color: #10b981;
-}
-
-.validity-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.validity-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-}
-
-.validity-key {
-  color: #64748b;
-}
-
-.validity-value {
-  font-family: monospace;
-  color: #0f172a;
-}
-
-.dark .validity-value {
-  color: #cbd5e1;
-}
-
-.validity-status {
-  color: #10b981;
-  font-weight: 700;
-}
-
-.qr-code-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-@media (min-width: 768px) {
-  .qr-code-container {
-    align-items: flex-end;
-  }
+  margin-bottom: 2.5rem;
 }
 
 .qr-code-wrapper {
@@ -747,8 +675,9 @@
 }
 
 .qr-code-image {
-  width: 5rem;
-  height: 5rem;
+  width: auto;
+  height: auto;
+  max-width: 100%;
 }
 
 .qr-code-description {
@@ -758,10 +687,183 @@
   max-width: 200px;
 }
 
-@media (min-width: 768px) {
-  .qr-code-description {
-    text-align: right;
+/* Security Proof Section */
+.security-proof-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.dark .security-proof-section {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.security-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dark .security-header {
+  border-bottom-color: #334155;
+}
+
+.security-main-icon {
+  font-size: 2.5rem;
+  color: #135bec;
+}
+
+.security-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dark .security-title {
+  color: white;
+}
+
+.security-subtitle {
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .proof-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.proof-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  position: relative;
+}
+
+.dark .proof-card {
+  background-color: #111827;
+  border-color: #334155;
+}
+
+.proof-icon-wrapper {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proof-icon-wrapper.blue {
+  background: rgba(19, 91, 236, 0.1);
+  color: #135bec;
+}
+
+.proof-icon-wrapper.green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.proof-icon-wrapper.orange {
+  background: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+}
+
+.proof-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.proof-label {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.proof-value {
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: #0f172a;
+  word-break: break-all;
+  font-weight: 600;
+}
+
+.dark .proof-value {
+  color: #94a3b8;
+}
+
+.blockchain-status {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+}
+
+.pulse {
+  animation: status-pulse 2s infinite;
+}
+
+@keyframes status-pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.issuer-verification {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #10b981;
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+
+.check-sm {
+  font-size: 1rem !important;
 }
 
 /* Action Bar */
