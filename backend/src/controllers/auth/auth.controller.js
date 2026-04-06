@@ -1,10 +1,12 @@
 const authService = require("../../services/auth.service");
 const response = require("../../utils/response");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
+    secure: isProduction,
+    sameSite: isProduction ? "None" : "Lax",
     maxAge: 24 * 60 * 60 * 1000, // 1 day
 };
 
@@ -43,6 +45,6 @@ exports.googleLogin = async (req, res, next) => {
 
 // POST /public/api/auth/logout
 exports.logout = async (req, res, next) => {
-    res.clearCookie("token");
+    res.clearCookie("token", cookieOptions);
     return response.success(res, null, "Logged out successfully");
 };

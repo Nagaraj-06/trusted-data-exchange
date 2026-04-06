@@ -9,6 +9,7 @@ const { frontendUrl } = require("./config/env");
 const swaggerDocs = require("./config/swagger");
 
 const app = express();
+app.set("trust proxy", 1); // Allow secure cookies behind reverse proxies
 
 // Middlewares
 app.use(express.json());
