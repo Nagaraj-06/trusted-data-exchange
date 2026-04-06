@@ -28,10 +28,22 @@ const AdminPanel = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // API Hooks
-  const { data: statsData, isLoading: statsLoading } = useGetAdminStatsQuery();
-  const { data: institutionsData, isLoading: institutionsLoading } = useGetInstitutionsQuery();
-  const { data: auditData, isLoading: auditLoading } = useGetAuditLogsQuery({ page: 1, limit: 10 });
+  // API Hooks with polling for real-time updates
+  const { data: statsData, isLoading: statsLoading, refetch: refetchStats } = useGetAdminStatsQuery(undefined, {
+    pollingInterval: 30000, // Poll every 30 seconds
+    refetchOnMountOrArgChange: true
+  });
+
+  const { data: institutionsData, isLoading: institutionsLoading, refetch: refetchInstitutions } = useGetInstitutionsQuery(undefined, {
+    pollingInterval: 30000, // Poll every 30 seconds
+    refetchOnMountOrArgChange: true
+  });
+
+  const { data: auditData, isLoading: auditLoading, refetch: refetchAudits } = useGetAuditLogsQuery({ page: 1, limit: 10 }, {
+    pollingInterval: 60000, // Poll every minute for audits
+    refetchOnMountOrArgChange: true
+  });
+
   const [updateStatus, { isLoading: isUpdating }] = useUpdateInstitutionStatusMutation();
   const [createInstitution, { isLoading: isCreating }] = useCreateInstitutionMutation();
   const [logoutApi] = useLogoutMutation();
@@ -45,6 +57,13 @@ const AdminPanel = () => {
 
   const institutions = institutionsData?.data || [];
   const auditLogs = auditData?.data?.logs || [];
+
+  const handleManualRefresh = () => {
+    refetchStats();
+    refetchInstitutions();
+    refetchAudits();
+    toast.success('Dashboard updated');
+  };
 
   const handleLogout = async () => {
     try {
@@ -162,6 +181,9 @@ const AdminPanel = () => {
             </div>
           </div>
           <div className="header-actions">
+            <button className="header-btn" onClick={handleManualRefresh} title="Refresh Data">
+              <span className="material-symbols-outlined">refresh</span>
+            </button>
             <button className="header-btn" onClick={() => toast.success('Everything is running smoothly!')}>
               <span className="material-symbols-outlined">notifications</span>
               <span className="notification-badge"></span>
@@ -227,7 +249,7 @@ const AdminPanel = () => {
                     </thead>
                     <tbody className="table-body">
                       {institutionsLoading ? (
-                        <tr><td colSpan="4" className="table-cell">Loading institutions...</td></tr>
+                        <tr><td colSpan="5" className="table-cell">Loading institutions...</td></tr>
                       ) : institutions.filter(inst => inst.status === 'PENDING').length > 0 ? (
                         institutions.filter(inst => inst.status === 'PENDING').map(inst => (
                           <tr key={inst.id}>
@@ -280,7 +302,7 @@ const AdminPanel = () => {
                           </tr>
                         ))
                       ) : (
-                        <tr><td colSpan="4" className="table-cell">No pending approvals.</td></tr>
+                        <tr><td colSpan="5" className="table-cell">No pending approvals.</td></tr>
                       )}
                     </tbody>
                   </table>
@@ -338,6 +360,9 @@ const AdminPanel = () => {
                         </td>
                       </tr>
                     ))}
+                    {institutions.length === 0 && (
+                      <tr><td colSpan="5" className="table-cell">No institutions found.</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>

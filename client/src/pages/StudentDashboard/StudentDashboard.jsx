@@ -17,9 +17,17 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // API Queries
-  const { data: recordsResponse, isLoading: recordsLoading } = useGetRecordsQuery();
-  const { data: shareLinksResponse } = useGetShareLinksQuery();
+  // API Queries with polling for fresh data
+  const { data: recordsResponse, isLoading: recordsLoading, refetch: refetchRecords } = useGetRecordsQuery(undefined, {
+    pollingInterval: 30000, // Poll every 30 seconds
+    refetchOnMountOrArgChange: true
+  });
+
+  const { data: shareLinksResponse, isLoading: shareLinksLoading, refetch: refetchShareLinks } = useGetShareLinksQuery(undefined, {
+    pollingInterval: 30000, // Poll every 30 seconds
+    refetchOnMountOrArgChange: true
+  });
+
   const [createShareLink] = useCreateShareLinkMutation();
   const [logoutApi] = useLogoutMutation();
 

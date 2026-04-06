@@ -68,7 +68,7 @@ async function createInstitution(data) {
 
 // Public registration (Pending)
 async function registerInstitution(data) {
-    return prisma.institution.create({
+    const institution = await prisma.institution.create({
         data: {
             name: data.name,
             accreditation: data.accreditation,
@@ -79,6 +79,18 @@ async function registerInstitution(data) {
             status: "PENDING",
         },
     });
+
+    // Log the application in the audit trail
+    await prisma.auditLog.create({
+        data: {
+            action: "INSTITUTION_APPLICATION_SUBMITTED",
+            userEmail: data.contactEmail,
+            resource: `Institution registration: ${data.name}`,
+            ipAddress: data.ipAddress || null,
+        },
+    });
+
+    return institution;
 }
 
 // Link a user to an institution

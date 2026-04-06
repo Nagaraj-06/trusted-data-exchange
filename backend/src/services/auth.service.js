@@ -46,13 +46,25 @@ async function googleLogin(idToken) {
     const payload = await verifyGoogleToken(idToken);
     const { sub: googleId, email, name, picture } = payload;
 
+    // First try to find by googleId
     let user = await prisma.user.findUnique({ where: { googleId } });
 
     if (!user) {
-        // First time Google login — create new user
-        user = await prisma.user.create({
-            data: { email, name, googleId, avatar: picture, role: "STUDENT" },
-        });
+        // If googleId not found, try finding by email to link accounts
+        user = await prisma.user.findUnique({ where: { email } });
+
+        if (user) {
+            // Link Google identity to existing email account
+            user = await prisma.user.update({
+                where: { id: user.id },
+                data: { googleId, avatar: user.avatar || picture },
+            });
+        } else {
+            // First time Google login and no existing email — create new user
+            user = await prisma.user.create({
+                data: { email, name, googleId, avatar: picture, role: "STUDENT" },
+            });
+        }
     }
 
     const token = generateToken({ id: user.id, email: user.email, role: user.role, institutionId: user.institutionId });

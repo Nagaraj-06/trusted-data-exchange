@@ -24,7 +24,8 @@ exports.registerInstitution = async (req, res, next) => {
             address,
             documentUrl,
             password: hashedPassword,
-            status: "PENDING"
+            status: "PENDING",
+            ipAddress: req.ip
         });
 
         return response.created(res, data, "Application submitted successfully. Please wait for admin approval.");
