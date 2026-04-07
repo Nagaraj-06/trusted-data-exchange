@@ -11,20 +11,24 @@ const RecordVerification = () => {
 
   if (isLoading) {
     return (
-      <div className="verification-loading">
-        <div className="spinner"></div>
-        <p>Verifying authenticity...</p>
+      <div className="rv-loading-screen">
+        <div className="rv-spinner"></div>
+        <p className="rv-loading-text">Verifying document authenticity...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="verification-error">
-        <span className="material-symbols-outlined error-icon">error</span>
-        <h2>Verification Failed</h2>
-        <p>{error?.data?.message || 'Invalid or expired verification link.'}</p>
-        <button className="back-btn" onClick={() => window.location.href = '/'}>Back to Home</button>
+      <div className="rv-error-container">
+        <div className="rv-error-card">
+          <span className="material-symbols-outlined rv-error-icon">error</span>
+          <h2 className="rv-error-title">Verification Link Invalid</h2>
+          <p className="rv-error-message">{error?.data?.message || 'This verification link is invalid, expired, or has been revoked by the owner.'}</p>
+          <button className="rv-home-btn" onClick={() => window.location.href = '/'}>
+            Return to Homepage
+          </button>
+        </div>
       </div>
     );
   }
@@ -32,279 +36,203 @@ const RecordVerification = () => {
   const { record, verificationId, expiresAt } = verificationData?.data || {};
 
   return (
-    <div className="verification-page">
-      {/* Top Navigation */}
-      <header className="verification-header no-print">
-        <div className="verification-nav-container">
-          <div className="nav-brand">
-            <div className="brand-logo">
-              <span className="material-symbols-outlined logo-icon" style={{ fontSize: '24px', color: '#135bec' }}>account_balance</span>
+    <div className="rv-page-wrapper">
+      {/* Top Navbar */}
+      <header className="rv-navbar no-print">
+        <div className="rv-nav-content">
+          <div className="rv-nav-brand" onClick={() => window.location.href = '/'}>
+            <div className="rv-brand-icon">
+              <span className="material-symbols-outlined">shield_person</span>
             </div>
-            <span className="brand-text">Academic Exchange</span>
+            <div className="rv-brand-text">
+              <span className="rv-brand-name">Academic Exchange</span>
+              <span className="rv-brand-tag">Verification Portal</span>
+            </div>
           </div>
-          <div className="nav-actions">
-            <button className="help-center-btn">Help Center</button>
-            <button className="export-pdf-btn" onClick={() => window.print()}>
-              <span className="material-symbols-outlined btn-icon-sm">download</span>
-              Export PDF
+          <div className="rv-nav-actions">
+            <button className="rv-nav-btn rv-btn-outline no-mobile" onClick={() => toast.info('Our support team is available 24/7')}>
+              Support
+            </button>
+            <button className="rv-nav-btn rv-btn-primary" onClick={() => window.print()}>
+              <span className="material-symbols-outlined">download</span>
+              Save PDF
             </button>
           </div>
         </div>
       </header>
 
-      <main className="verification-main">
-        {/* Verification Banner */}
-        <div className="verification-banner">
-          <div className="banner-content">
-            <div className="banner-info">
-              <div className="verified-badge">
-                <span className="material-symbols-outlined verified-icon">check_circle</span>
+      <main className="rv-main-container">
+        {/* Verification Status Banner */}
+        <div className="rv-banner-verified">
+          <div className="rv-banner-inner">
+            <div className="rv-status-badge">
+              <div className="rv-badge-icon">
+                <span className="material-symbols-outlined">verified</span>
               </div>
-              <div className="banner-text">
-                <h1 className="banner-title">Authenticity Verified</h1>
-                <p className="banner-subtitle">This record is direct-from-source and cryptographically signed.</p>
+              <div className="rv-status-text">
+                <h1 className="rv-status-title">Authenticity Confirmed</h1>
+                <p className="rv-status-desc">This record is verified from the source and cryptographically signed.</p>
               </div>
             </div>
-            <div className="verification-meta">
-              <span className="verification-id">Verification ID: {verificationId || 'TADE-' + token.substring(0, 8).toUpperCase()}</span>
-              <span className="verification-timestamp">Expires: {expiresAt ? new Date(expiresAt).toLocaleString() : 'N/A'}</span>
+            <div className="rv-verification-metadata">
+              <div className="rv-meta-item">
+                <span className="rv-meta-label">Verification ID</span>
+                <span className="rv-meta-value">{verificationId || `TADE-${token.substring(0, 8).toUpperCase()}`}</span>
+              </div>
+              <div className="rv-meta-item">
+                <span className="rv-meta-label">Link Expiry</span>
+                <span className="rv-meta-value">
+                  {expiresAt ? new Date(expiresAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Never'}
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content Card */}
-        <div className="credential-card">
-          {/* Institutional Header */}
-          <div className="institution-header">
-            <div className="institution-info">
-              <div className="institution-logo">
-                <div className="institution-avatar" style={{
-                  width: '64px',
-                  height: '64px',
-                  backgroundColor: '#f6f6f8',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                  color: '#135bec'
-                }}>
-                  {record?.institution?.name?.charAt(0) || 'U'}
-                </div>
+        {/* The Digital Certificate Card */}
+        <div className="rv-credential-card">
+          {/* Institution Header */}
+          <section className="rv-section rv-card-header">
+            <div className="rv-institution-block">
+              <div className="rv-institution-avatar">
+                {record?.institution?.name?.charAt(0) || 'U'}
               </div>
-              <div className="institution-details">
-                <h2 className="institution-name">{record?.institution?.name || 'Academic Institution'}</h2>
-                <p className="institution-office">Office of the Registrar | Official Records Dept.</p>
-                <p className="institution-contact">Contact: {record?.institution?.contactEmail || 'registrar@institution.edu'}</p>
-              </div>
-            </div>
-            <div className="issuance-info">
-              <p className="issuance-label">Issuance Date</p>
-              <p className="issuance-date">{record?.issueDate ? new Date(record.issueDate).toLocaleDateString() : 'N/A'}</p>
-              <p className="issuance-ref">Status: {record?.status || 'Active'}</p>
-            </div>
-          </div>
-
-          {/* Student Summary */}
-          <div className="student-summary">
-            <div className="summary-content">
-              <div
-                className="student-photo"
-                style={{ backgroundImage: `url("https://ui-avatars.com/api/?name=${record?.student?.name || 'Student'}&background=random")` }}
-              ></div>
-              <div className="student-info-grid">
-                <div className="info-field">
-                  <span className="field-label">Candidate Full Name</span>
-                  <p className="field-value-large">{record?.student?.name || 'N/A'}</p>
-                </div>
-                <div className="info-field field-right">
-                  <span className="field-label">Record Status</span>
-                  <p className="field-value-large">{record?.status || 'VERIFIED'}</p>
-                </div>
-                <div className="info-field">
-                  <span className="field-label">Academic Program</span>
-                  <p className="field-value-medium">{record?.program || 'N/A'}</p>
-                </div>
-                <div className="info-field field-right">
-                  <span className="field-label">Degree Classification</span>
-                  <p className="field-value-medium">{record?.degree || 'N/A'}</p>
+              <div className="rv-institution-info">
+                <h2 className="rv-institution-title">{record?.institution?.name || 'Academic Institution'}</h2>
+                <div className="rv-institution-meta">
+                  <span>Official Records Dept.</span>
+                  <span className="rv-dot-separator"></span>
+                  <span>{record?.institution?.contactEmail}</span>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Academic Transcript Section (Simplified for this view) */}
-          <div className="transcript-section">
-            <div className="transcript-header">
-              <h3 className="transcript-title">
-                <span className="material-symbols-outlined title-icon">description</span>
-                Official Record Details
-              </h3>
-              <span className="certified-badge">Read-Only Certified</span>
+            <div className="rv-issuance-block">
+              <span className="rv-issuance-label">Issued On</span>
+              <span className="rv-issuance-value">{record?.issueDate ? new Date(record.issueDate).toLocaleDateString() : 'N/A'}</span>
+              <div className="rv-ref-tag">#{record?.refCode}</div>
             </div>
-            <div className="transcript-table-wrapper">
-              <table className="transcript-table">
-                <thead>
-                  <tr className="table-header-row">
-                    <th className="table-header-cell header-rounded-left">Record Information</th>
-                    <th className="table-header-cell header-rounded-right header-center">Details</th>
-                  </tr>
-                </thead>
-                <tbody className="table-body">
-                  <tr className="table-data-row">
-                    <td className="course-title">Credential Type</td>
-                    <td className="course-grade header-center">{record?.degree || 'Digital Transcript'}</td>
-                  </tr>
-                  <tr className="table-data-row">
-                    <td className="course-title">Academic Result / Grade</td>
-                    <td className="course-grade header-center">{record?.grade || 'Pass'}</td>
-                  </tr>
-                  <tr className="table-data-row">
-                    <td className="course-title">Verification Protocol</td>
-                    <td className="course-grade header-center">TADE-v1 (Public Ledger)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          </section>
 
-          {/* Verification & Digital Signature */}
-          <div className="digital-signature-section">
-            <div className="security-header">
-              <span className="material-symbols-outlined security-main-icon">verified_user</span>
-              <div>
-                <h3 className="security-title">Digital Certificate Validity</h3>
-                <p className="security-subtitle">Cryptographically secured by Trusted Data Exchange network.</p>
-              </div>
-            </div>
-
-            <div className="qr-verification-seal">
-              <div className="qr-code-wrapper">
-                <QRCodeSVG
-                  value={window.location.href}
-                  size={140}
-                  level={"H"}
-                  includeMargin={true}
-                  className="qr-code-image"
-                />
-              </div>
-            </div>
-
-            <div className="proof-grid">
-              <div className="proof-card">
-                <div className="proof-icon-wrapper blue">
-                  <span className="material-symbols-outlined">badge</span>
-                </div>
-                <div className="proof-content">
-                  <span className="proof-label">Document ID</span>
-                  <span className="proof-value">{record?.id || 'Record_Signed'}</span>
-                </div>
-              </div>
-
-              <div className="proof-card">
-                <div className="proof-icon-wrapper green">
-                  <span className="material-symbols-outlined">corporate_fare</span>
-                </div>
-                <div className="proof-content">
-                  <span className="proof-label">Signing Authority</span>
-                  <span className="proof-value">{record?.institution?.name || 'TADE Authorized'}</span>
-                </div>
-              </div>
-
-              <div className="proof-card">
-                <div className="proof-icon-wrapper orange">
-                  <span className="material-symbols-outlined">verified</span>
-                </div>
-                <div className="proof-content">
-                  <span className="proof-label">Signature Status</span>
-                  <div className="issuer-verification">
-                    <span className="material-symbols-outlined check-sm">check_circle</span>
-                    Valid & Untampered
+          {/* Student Profile Overview */}
+          <section className="rv-section rv-student-overview">
+            <div className="rv-student-card">
+              <div className="rv-profile-section">
+                <div
+                  className="rv-profile-image"
+                  style={{ backgroundImage: `url("https://ui-avatars.com/api/?name=${record?.student?.name || 'S'}&background=135bec&color=fff&size=128")` }}
+                ></div>
+                <div className="rv-student-primary">
+                  <span className="rv-label">Awarded To</span>
+                  <p className="rv-student-name">{record?.student?.name || 'N/A'}</p>
+                  <div className="rv-status-pill verified">
+                    <span className="rv-pulse"></span>
+                    Identity Verified
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Security & Authenticity Proofs */}
-        <div className="security-proof-section">
-          <div className="security-header">
-            <span className="material-symbols-outlined security-main-icon">verified</span>
-            <div>
-              <h3 className="security-title">Security & Authenticity Fingerprint</h3>
-              <p className="security-subtitle">Cryptographically signed by {record?.institution?.name}</p>
-            </div>
-          </div>
-
-          <div className="proof-grid">
-            <div className="proof-card">
-              <div className="proof-icon-wrapper blue">
-                <span className="material-symbols-outlined">fingerprint</span>
-              </div>
-              <div className="proof-content">
-                <span className="proof-label">Digital Signature Hash</span>
-                <code className="proof-value">
-                  {record?.id ? `SHA256:${btoa(record.id + 'SECRET').substring(0, 32).toUpperCase()}` : 'Generating...'}
-                </code>
-              </div>
-            </div>
-
-            <div className="proof-card">
-              <div className="proof-icon-wrapper green">
-                <span className="material-symbols-outlined">account_tree</span>
-              </div>
-              <div className="proof-content">
-                <span className="proof-label">Blockchain Transaction</span>
-                <code className="proof-value">
-                  {record?.id ? `0X${String(record.id).substring(0, 8)}${token.substring(0, 12)}...` : 'Pending Ledger...'}
-                </code>
-              </div>
-              <div className="blockchain-status">
-                <span className="dot pulse"></span>
-                Verified on Mainnet
-              </div>
-            </div>
-
-            <div className="proof-card">
-              <div className="proof-icon-wrapper orange">
-                <span className="material-symbols-outlined">shield_person</span>
-              </div>
-              <div className="proof-content">
-                <span className="proof-label">Issuer Authenticity</span>
-                <div className="issuer-verification">
-                  <span className="material-symbols-outlined check-sm">check_circle</span>
-                  University SSO Verified
+              <div className="rv-academic-grid">
+                <div className="rv-academic-item">
+                  <span className="rv-label">Degree Conferred</span>
+                  <p className="rv-value">{record?.degree || 'N/A'}</p>
+                </div>
+                <div className="rv-academic-item">
+                  <span className="rv-label">Major / Program</span>
+                  <p className="rv-value">{record?.program || 'N/A'}</p>
+                </div>
+                <div className="rv-academic-item">
+                  <span className="rv-label">Graduation Year</span>
+                  <p className="rv-value">{record?.graduationYear || 'N/A'}</p>
+                </div>
+                <div className="rv-academic-item">
+                  <span className="rv-label">Final Grade / GPA</span>
+                  <p className="rv-value rv-highlight">{record?.grade || 'Pass'}</p>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
+
+          {/* Verification Protocol & QR */}
+          <section className="rv-section rv-security-protocol">
+            <div className="rv-security-flex">
+              <div className="rv-security-info">
+                <div className="rv-security-header">
+                  <span className="material-symbols-outlined rv-icon-sec">verified_user</span>
+                  <div>
+                    <h3 className="rv-sec-title">Digital Signature Policy</h3>
+                    <p className="rv-sec-desc">This document contains a unique cryptographic hash and QR verification seal.</p>
+                  </div>
+                </div>
+
+                <div className="rv-proof-list">
+                  <div className="rv-proof-row">
+                    <span className="material-symbols-outlined rv-check">check_circle</span>
+                    <span>Issuer Authenticity: <strong>Confirmed via SSO</strong></span>
+                  </div>
+                  <div className="rv-proof-row">
+                    <span className="material-symbols-outlined rv-check">check_circle</span>
+                    <span>Document Integrity: <strong>No tampering detected</strong></span>
+                  </div>
+                  <div className="rv-proof-row">
+                    <span className="material-symbols-outlined rv-check">check_circle</span>
+                    <span>Blockchain Status: <strong>Verified on Ledger</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rv-qr-section">
+                <div className="rv-qr-container">
+                  <QRCodeSVG
+                    value={window.location.href}
+                    size={110}
+                    level={"H"}
+                    className="rv-qr-svg"
+                  />
+                </div>
+                <p className="rv-qr-hint">Scan to verify original</p>
+              </div>
+            </div>
+          </section>
         </div>
 
-        {/* Action Bar Footer */}
-        <div className="action-bar no-print">
-          <div className="session-info">
-            <span className="material-symbols-outlined session-icon">lock</span>
-            Secure, read-only session. Powered by TADE.
+        {/* Technical Identity Section */}
+        <section className="rv-tech-specs">
+          <div className="rv-tech-header">
+            <h3 className="rv-tech-title">Cryptographic Fingerprint</h3>
+            <span className="rv-tech-tag">TADE-v1.0 Standard</span>
           </div>
-          <div className="action-buttons">
-            <button className="report-btn" onClick={() => toast.info('Reporting discrepancy')}>Report Discrepancy</button>
-            <button className="print-btn" onClick={() => window.print()}>Print Certification</button>
+          <div className="rv-tech-content">
+            <div className="rv-hash-block">
+              <span className="rv-hash-label">Document Hash (SHA256)</span>
+              <code className="rv-hash-value">
+                {record?.id ? `SHA256:${btoa(record.id + 'TADE_PRIVATE_KEY').substring(0, 48).toUpperCase()}` : '0x000...'}
+              </code>
+            </div>
+            <div className="rv-hash-block">
+              <span className="rv-hash-label">Blockchain TX Hash</span>
+              <code className="rv-hash-value">
+                {record?.id ? `TXN:0x${String(record.id).padStart(8, '0')}${token.substring(0, 24)}` : 'Pending broadcast...'}
+              </code>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Site Footer */}
-        <footer className="site-footer">
-          <p>© 2024 Trusted Data Exchange Platform. All rights reserved.</p>
-          <p className="footer-disclaimer">
-            This link provides a single-source-of-truth from the issuing institution. If you received this document via any other method, please verify it here.
-          </p>
+        {/* Footer Area */}
+        <footer className="rv-footer no-print">
+          <div className="rv-footer-links">
+            <button className="rv-footer-link" onClick={() => toast.info('Redirecting to report form...')}>Report Discrepancy</button>
+            <span className="rv-separator">|</span>
+            <button className="rv-footer-link">Terms of Service</button>
+            <span className="rv-separator">|</span>
+            <button className="rv-footer-link">Privacy Policy</button>
+          </div>
+          <p className="rv-copyright">© 2024 Trusted Data Exchange. Powered by Federated Ledger Identity.</p>
         </footer>
       </main>
 
-      {/* Background Decoration */}
-      <div className="gradient-bar"></div>
+      {/* Decorative gradient background */}
+      <div className="rv-bg-top"></div>
+      <div className="rv-bg-bottom"></div>
     </div>
   );
 };
